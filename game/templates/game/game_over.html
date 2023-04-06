@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 class="mb-4 text-center">Game Over</h1>
+    <h2 class="mb-4 text-center">Your score: {{ score }}</h2>
+    <div class="text-center mb-4">
+        <a href="{% url 'game:start' %}" class="btn btn-primary">Play Again</a>
+    </div>
+    <h2 class="text-center">Leaderboards</h2>
+    <div class="leaderboard-container">
+        <div class="leaderboard">
+            <h2>Overall</h2>
+            <ol>
+                {% for entry in overall_leaderboard %}
+                    <li><span>{{ entry.player_name }}</span><span>{{ entry.score }}</span></li>
+                {% endfor %}
+            </ol>
+        </div>
+    
+        <div class="leaderboard">
+            <h2>Monthly</h2>
+            <ol>
+                {% for entry in monthly_leaderboard %}
+                    <li><span>{{ entry.player_name }}</span><span>{{ entry.score }}</span></li>
+                {% endfor %}
+            </ol>
+        </div>
+    
+        <div class="leaderboard">
+            <h2>Weekly</h2>
+            <ol>
+                {% for entry in weekly_leaderboard %}
+                    <li><span>{{ entry.player_name }}</span><span>{{ entry.score }}</span></li>
+                {% endfor %}
+            </ol>
+        </div>
+    </div>
+    
+    <footer class="text-center mt-4">
+        <p>Developed by Johny Junqueira and GPT-4</p>
+    </footer>
+{% endblock %}

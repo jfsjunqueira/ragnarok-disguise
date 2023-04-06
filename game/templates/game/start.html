@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 class="mb-4 text-center">Ragnarok Disguise</h1>
+    <h2 class="mb-4 text-center">Guess the monster!</h2>
+    <form method="post" class="text-center">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.player_name.label_tag }} {{ form.player_name }}
+        </div>
+        <button type="submit" class="btn btn-primary">Start</button>
+    </form>
+    <h2 class="text-center mt-4">Leaderboards</h2>
+    <div class="leaderboard-container">
+        <div class="leaderboard">
+            <h2>Overall</h2>
+            <ol>
+                {% for entry in overall_leaderboard %}
+                    <li><span>{{ entry.player_name }}</span><span>{{ entry.score }}</span></li>
+                {% endfor %}
+            </ol>
+        </div>
+    
+        <div class="leaderboard">
+            <h2>Monthly</h2>
+            <ol>
+                {% for entry in monthly_leaderboard %}
+                    <li><span>{{ entry.player_name }}</span><span>{{ entry.score }}</span></li>
+                {% endfor %}
+            </ol>
+        </div>
+    
+        <div class="leaderboard">
+            <h2>Weekly</h2>
+            <ol>
+                {% for entry in weekly_leaderboard %}
+                    <li><span>{{ entry.player_name }}</span><span>{{ entry.score }}</span></li>
+                {% endfor %}
+            </ol>
+        </div>
+    </div>
+    
+    <footer class="text-center mt-4">
+        <p>Developed by Johny Junqueira and GPT-4</p>
+    </footer>
+{% endblock %}

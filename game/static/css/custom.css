@@ -1,0 +1,167 @@
+/* Custom CSS */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.badge {
+    font-size: 20px;
+    padding: 10px;
+}
+
+.btn {
+    font-size: 18px;
+    padding: 10px 20px;
+    margin: 5px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.img-container {
+    width: 100%;
+    max-height: 300px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.img-container img {
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input[type="text"] {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-group input[type="text"]:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem !important;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.col-md-6 {
+    flex: 0 0 auto;
+    width: 50%;
+}
+
+/* Add some basic mobile responsiveness */
+@media (max-width: 576px) {
+    h1 {
+        font-size: 28px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    .badge {
+        font-size: 16px;
+    }
+
+    .btn {
+        font-size: 16px;
+    }
+
+    .container {
+        padding: 15px;
+    }
+}
+
+.leaderboard-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.leaderboard {
+    width: 30%;
+    margin-bottom: 20px;
+}
+
+.leaderboard ol {
+    counter-reset: leaderboard;
+    padding: 0;
+}
+
+.leaderboard ol li::before {
+    counter-increment: leaderboard;
+    content: counter(leaderboard) ". ";
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.leaderboard ol li {
+    list-style: none;
+    padding: 5px;
+    margin-bottom: 5px;
+    background-color: #f8f9fa;
+    transition: background-color 0.3s;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.leaderboard ol li:hover {
+    background-color: #e9ecef;
+}

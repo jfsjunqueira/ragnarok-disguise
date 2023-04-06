@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="flex-container">
+    <h1 class="mb-4 text-center">Ragnarok Disguise</h1>
+    <h2 class="mb-4 text-center">Guess the monster!</h2>
+    <div class="row mb-4">
+        <div class="col-md-6 text-center">
+            <h2>Score: <span class="badge bg-primary">{{ score }}</span></h2>
+        </div>
+        <div class="col-md-6 text-center">
+            <h2>Lifes: <span class="badge bg-danger">{{ lifes }}</span></h2>
+        </div>
+    </div>
+    <div class="text-center mb-4 new flex-grow">
+        <img src="https://static.ragnaplace.com/db/npc/gif/{% if monster_id %}{{ monster_id }}{% endif %}.gif" alt="Monster Sprite" class="img-fluid">
+    </div>
+    <form method="post" class="mb-3 text-center">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.guess.label_tag }} {{ form.guess }}
+        </div>
+        <button type="submit" class="btn btn-primary">Guess</button>
+    </form>
+    <form method="post" action="{% url 'game:start' %}" class="text-center">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-warning">Restart</button>
+    </form>
+    <footer class="text-center mt-4">
+        <p>Developed by Johny Junqueira and GPT-4</p>
+    </footer>
+</div>
+{% endblock %}
