@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load form_extras %}
 
 {% block content %}
 <div class="flex-container">
@@ -17,8 +18,8 @@
     </div>
     <form method="post" class="mb-3 text-center">
         {% csrf_token %}
-        <div class="form-group">
-            {{ form.guess.label_tag }} {{ form.guess }}
+        <div class="form-group" >
+            {{ form.guess.label_tag }} {{ form.guess|addattrs:"id:monster-name" }}
         </div>
         <button type="submit" class="btn btn-primary">Guess</button>
     </form>
