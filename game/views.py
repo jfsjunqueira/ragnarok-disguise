@@ -56,7 +56,7 @@ def game(request):
                 'monthly_leaderboard': monthly_leaderboard,
                 'weekly_leaderboard': weekly_leaderboard,
             }
-            return render(request, 'game/game_over.html', context)
+            return redirect('game:game_over')
 
     # Select a random monster ID from the POSSIBLE_MONSTERS list
     id_monster = random.choice(POSSIBLE_MONSTERS)
@@ -105,22 +105,26 @@ def start(request):
 
 def game_over(request):
     if request.session.get('player_name') and request.session.get('score') is not None:
-        entry = LeaderboardEntry(player_name=request.session['player_name'], score=request.session['score'])
-        entry.save()
-        
         overall_leaderboard = LeaderboardEntry.objects.all()[:10]
         monthly_leaderboard = LeaderboardEntry.objects.filter(timestamp__gte=datetime.now() - timedelta(days=30))[:10]
         weekly_leaderboard = LeaderboardEntry.objects.filter(timestamp__gte=datetime.now() - timedelta(days=7))[:10]
 
         context = {
+            'score': request.session['score'],  # Add the player's score to the context
             'overall_leaderboard': overall_leaderboard,
             'monthly_leaderboard': monthly_leaderboard,
             'weekly_leaderboard': weekly_leaderboard,
         }
 
+        # Clear the score and player_name from the session to avoid duplicate entries
+        del request.session['score']
+        del request.session['player_name']
+        request.session.modified = True
+
         return render(request, 'game/game_over.html', context)
 
     return redirect('game:start')
+
 
 def leaderboard(request):
     entries = LeaderboardEntry.objects.all()
