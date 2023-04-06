@@ -2,11 +2,11 @@
 
 {% block content %}
     <h1 class="mb-4 text-center">Game Over</h1>
-    <h2 class="mb-4 text-center">Your score: {{ score }}</h2>
+    <h2 class="mb-4 text-center">Score: {{ score }}</h2>
     <div class="text-center mb-4">
-        <a href="{% url 'game:start' %}" class="btn btn-primary">Play Again</a>
+        <a href="{% url 'game:start' %}" class="btn btn-primary">Jogue Denovo</a>
     </div>
-    <h2 class="text-center">Leaderboards</h2>
+    <h2 class="text-center">Ranking Mestres dos Monstros</h2>
     <div class="leaderboard-container">
         <div class="leaderboard">
             <h2>Overall</h2>
@@ -37,6 +37,6 @@
     </div>
     
     <footer class="text-center mt-4">
-        <p>Developed by Johny Junqueira and GPT-4</p>
+        <p>Desenvolvido por Rejected [OptionalRO/CrockRO/TownRO/Advgames/Ragalera/(...)] ou Johny Junqueira</p>
     </footer>
 {% endblock %}
