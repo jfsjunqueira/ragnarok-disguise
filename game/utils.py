@@ -1,29 +1,58 @@
 import requests
 from bs4 import BeautifulSoup
 
-def fetch_monster(id_monster):
-    url = f"http://www3.worldrag.com/database/?act=mobsearch&cid=on&id={id_monster}"
-    response = requests.get(url)
-    
-    if response.status_code == 200:
-        soup = BeautifulSoup(response.text, 'html.parser')
-        monster_name_element = soup.find('td', text=lambda x: x and f'({id_monster})' in x)
-        
+# Create separate classes for fetching monster data from different franchises
+
+
+class RagnarokMonster:
+    def __init__(self, id_monster:int):
+        self.id_monster = id_monster
+        self.url = f"http://www3.worldrag.com/database/?act=mobsearch&cid=on&id={id_monster}"
+        self.soup = BeautifulSoup(requests.get(self.url).text, 'html.parser')
+        self.monster_name = self.fetch_ragnarok_monster_name()
+        self.sprite_url = self.fetch_ragnarok_monster_sprite_url()
+
+    def fetch_ragnarok_monster_name(self):
+        monster_name_element = self.soup.find('td', text=lambda x: x and f'({self.id_monster})' in x) # type: ignore
         if monster_name_element:
             monster_name = monster_name_element.text.split(' (')[0]  # Remove the ID from the monster name
         else:
-            monster_name = f"Monster {id_monster}"
-        
-        monster_img_element = soup.find('img', {'src': True, 'alt': True})
-        if monster_img_element:
-            monster_img_url = f"http://www3.worldrag.com/database/{monster_img_element['src']}"
-        else:
-            monster_img_url = None
-        
+            monster_name = f"Monster {self.id_monster}"
+        return monster_name
+    
+    def fetch_ragnarok_monster_sprite_url(self):
+        return f"https://static.ragnaplace.com/db/npc/gif/{self.id_monster}.gif"
+    
+    def to_dict(self):
         return {
-            'id': id_monster,
-            'name': monster_name,
-            'sprite': monster_img_url,
+            'id': self.id_monster,
+            'name': self.monster_name,
+            'sprite': self.sprite_url,
         }
-    else:
-        return None
+
+
+class PokemonMonster:
+    def __init__(self, id_monster:int):
+        self.id_monster = id_monster
+        self.url = f"https://pokemondb.net/pokedex/{id_monster}"
+        self.soup = BeautifulSoup(requests.get(self.url).text, 'html.parser')
+        self.monster_name = self.fetch_ragnarok_monster_name()
+        self.sprite_url = self.fetch_ragnarok_monster_sprite_url()
+
+    def fetch_ragnarok_monster_name(self):
+        monster_name_element = self.soup.find('h1') # type: ignore
+        if monster_name_element:
+            monster_name = monster_name_element.text  # Remove the ID from the monster name
+        else:
+            monster_name = f"Pokemon {self.id_monster}"
+        return monster_name
+    
+    def fetch_ragnarok_monster_sprite_url(self):
+        return f"https://img.pokemondb.net/artwork/{self.monster_name.lower()}.jpg"
+    
+    def to_dict(self):
+        return {
+            'id': self.id_monster,
+            'name': self.monster_name,
+            'sprite': self.sprite_url,
+        }

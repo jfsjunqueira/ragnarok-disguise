@@ -1,15 +1,30 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1 class="mb-4 text-center">Ragnarok Disguise</h1>
-    <h2 class="mb-4 text-center">Acerte os monstro e mostre que você já foi viciado no joguinho!</h2>
-    <form method="post" class="text-center">
-        {% csrf_token %}
-        <div class="form-group">
-            {{ form.player_name.label_tag }} {{ form.player_name }}
+<h1 class="mb-4 text-center">Mestre dos Monstros</h1>
+<h3 class="mb-4 text-center">Acerte os monstro e mostre que você já foi viciado no joguinho!</h3>
+<form method="post" class="text-center">
+    {% csrf_token %}
+    <div class="form-group">
+        {{ form.player_name.label_tag }} {{ form.player_name }}
+    </div>
+    <div class="game-selection">
+        <h4>Choose your game:</h4>
+        <div class="game-options">
+            {% for game in game_choice_form.games %}
+            <div class="game-option">
+                <input type="radio" name="{{ game_choice_form.game.html_name }}" value="{{ game.0 }}" id="{{ game.0 }}" {% if game.data.selected %}checked{% endif %}>
+                <label for="{{ game.0 }}">
+                    <div class="game-info">
+                        <img src="{{ game.2 }}" alt="{{ game.1 }} Image">
+                    </div>
+                </label>
+            </div>
+            {% endfor %}
         </div>
-        <button type="submit" class="btn btn-primary">Start</button>
-    </form>
+    </div>
+    <button type="submit" class="btn btn-primary">Start</button>
+</form>
     <h2 class="text-center mt-4">Ranking Mestres dos Monstros</h2>
     <div class="leaderboard-container">
         <div class="leaderboard">
@@ -41,6 +56,6 @@
     </div>
     
     <footer class="text-center mt-4">
-        <p>Desenvolvido por Rejected [OptionalRO/CrockRO/TownRO/Advgames/Ragalera/(...)] ou Johny Junqueira</p>
+        <p>Desenvolvido por Johny Junqueira</p>
     </footer>
 {% endblock %}

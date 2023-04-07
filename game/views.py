@@ -1,18 +1,22 @@
 from django.shortcuts import render, redirect
 
 from .models import LeaderboardEntry
-from .forms import MonsterGuessForm, LeaderboardEntryForm, PlayerNameForm
+from .forms import GameChoiceForm, MonsterGuessForm, LeaderboardEntryForm, PlayerNameForm
 from pathlib import Path
 from datetime import timedelta
 from datetime import datetime
 from unidecode import unidecode
 
 from django.shortcuts import render
-from django.http import JsonResponse
-from .utils import fetch_monster
+from .utils import PokemonMonster, RagnarokMonster
 import random
 
-POSSIBLE_MONSTERS = Path(__file__).parent.joinpath('ids.csv').read_text().split('\n')
+ID_LISTS_PATH = Path(__file__).parent.joinpath('id_lists/')
+
+POSSIBLE_GAMES = {
+    "ragnarok_monsters" : ID_LISTS_PATH.joinpath('ragnarok/ragnarok_monsters.csv').read_text().split('\n'),
+    "pokemon_monsters": ID_LISTS_PATH.joinpath('pokemon/pokemon_monsters.csv').read_text().split('\n'),
+}
 
 
 
@@ -57,10 +61,22 @@ def game(request):
                 'weekly_leaderboard': weekly_leaderboard,
             }
             return redirect('game:game_over')
+        
+    game_choice = request.session.get('game_choice', 'ragnarok')  # Get the selected game from the session
+    
+    if game_choice == 'ragnarok':
+        id_list_key = 'ragnarok_monsters'
+        fetch_class = RagnarokMonster
+    elif game_choice == 'pokemon':
+        id_list_key = 'pokemon_monsters'
+        fetch_class = PokemonMonster
+    else:
+        id_list_key = 'ragnarok_monsters'
+        fetch_class = RagnarokMonster
 
     # Select a random monster ID from the POSSIBLE_MONSTERS list
-    id_monster = random.choice(POSSIBLE_MONSTERS)
-    monster = fetch_monster(id_monster)
+    id_monster = random.choice(POSSIBLE_GAMES[id_list_key])
+    monster = fetch_class(id_monster).to_dict()
 
     request.session['correct_monster_name'] = monster['name']
     request.session.modified = True
@@ -69,7 +85,6 @@ def game(request):
     context = {
         'monster_sprite': monster['sprite'],
         'monster_id': id_monster, 
-        # 'correct_monster_name': correct_monster_name,
         'score': request.session['score'],
         'lifes': request.session['lifes'],
         'form': form,  # Pass the form object to the context
@@ -85,16 +100,21 @@ def start(request):
 
     if request.method == 'POST':
         form = PlayerNameForm(request.POST)
-        if form.is_valid():
+        game_choice_form = GameChoiceForm(request.POST)
+        if form.is_valid() and game_choice_form.is_valid():
             request.session['player_name'] = form.cleaned_data['player_name']
+            request.session['game_choice'] = game_choice_form.cleaned_data['game']
             request.session['lifes'] = 3  # Reset lifes
             request.session['score'] = 0  # Reset score
             return redirect('game:game')
     else:
         form = PlayerNameForm()
+        game_choice_form = GameChoiceForm()
 
     context = {
         'form': form,
+        'game_choice_form': game_choice_form,
+        'choice_images': game_choice_form.choice_images,
         'overall_leaderboard': overall_leaderboard,
         'monthly_leaderboard': monthly_leaderboard,
         'weekly_leaderboard': weekly_leaderboard,

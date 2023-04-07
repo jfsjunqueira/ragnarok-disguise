@@ -3,8 +3,8 @@
 
 {% block content %}
 <div class="flex-container">
-    <h1 class="mb-4 text-center">Ragnarok Disguise</h1>
-    <h2 class="mb-4 text-center">Guess the monster!</h2>
+    <h1 class="mb-4 text-center">Disguise</h1>
+    <h2 class="mb-4 text-center">Acerte o monstro!</h2>
     <div class="row mb-4">
         <div class="col-md-6 text-center">
             <h2>Score: <span class="badge bg-primary">{{ score }}</span></h2>
@@ -14,7 +14,7 @@
         </div>
     </div>
     <div class="text-center mb-4 new flex-grow">
-        <img src="https://static.ragnaplace.com/db/npc/gif/{% if monster_id %}{{ monster_id }}{% endif %}.gif" alt="Monster Sprite" class="img-fluid">
+        <img src="{% if monster_sprite %}{{ monster_sprite }}{% endif %}" alt="Monster Sprite" class="img-fluid">
     </div>
     <form method="post" class="mb-3 text-center">
         {% csrf_token %}
@@ -28,7 +28,7 @@
         <button type="submit" class="btn btn-warning">Restart</button>
     </form>
     <footer class="text-center mt-4">
-        <p>Desenvolvido por Rejected [OptionalRO/CrockRO/TownRO/Advgames/Ragalera/(...)] ou Johny Junqueira</p>
+        <p>Desenvolvido por Johny Junqueira</p>
     </footer>
 </div>
 {% endblock %}
