@@ -6,6 +6,7 @@ from pathlib import Path
 from datetime import timedelta
 from datetime import datetime
 from unidecode import unidecode
+import Levenshtein
 
 from django.shortcuts import render
 from .utils import PokemonMonster, RagnarokMonster
@@ -31,7 +32,7 @@ def game(request):
             request.session['lifes'] = 3
         else:
             guess = request.POST.get('guess', '').lower()
-            if unidecode(request.session['correct_monster_name'].lower()) == unidecode(guess):
+            if Levenshtein.distance(unidecode(request.session['correct_monster_name'].lower()), unidecode(guess.lower())) <= 1:
                 request.session['score'] = request.session.get('score', 0) + 1
                 scored = True
             else:
